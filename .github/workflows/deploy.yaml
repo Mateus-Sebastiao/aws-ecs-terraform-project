@@ -10,8 +10,8 @@ env:
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
 
 jobs:
-  deploy:
-    name: Build, Push & Deploy
+  terraform:
+    name: Provisionando a Infraestrutura na AWS
     runs-on: ubuntu-latest
 
     steps:
@@ -25,6 +25,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: terraform init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: terraform plan
+        working-directory: ./terraform
+        run: terraform plan -input=false
+
+      - name: terraform apply
+        working-directory: ./terraform
+        run: terraform apply -auto-approve -input=false
+  docker:
+    name: Checkout, Build & Push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        
       - name: Fazer login no ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -38,14 +57,3 @@ jobs:
         run: |
           docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:latest
 
-      - name: terraform init
-        working-directory: ./terraform
-        run: terraform init
-
-      - name: terraform plan
-        working-directory: ./terraform
-        run: terraform plan -input=false
-
-      - name: terraform apply
-        working-directory: ./terraform
-        run: terraform apply -auto-approve -input=false
