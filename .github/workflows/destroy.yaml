@@ -27,6 +27,11 @@ jobs:
         with:
           terraform_version: 1.12.0
 
+      - name: Terraform Init
+        id: init
+        working-directory: ./terraform 
+        run: terraform init -input=false
+
       - name: Destruir infraestrutura
         working-directory: ./terraform
         run: terraform destroy -auto-approve -input=false
