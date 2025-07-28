@@ -32,6 +32,11 @@ jobs:
         working-directory: ./terraform 
         run: terraform init -input=false
 
+      - name: Terraform Refresh
+        id: init
+        working-directory: ./terraform 
+        run: terraform refresh
+
       - name: Destruir infraestrutura
         working-directory: ./terraform
         run: terraform destroy -auto-approve -input=false
