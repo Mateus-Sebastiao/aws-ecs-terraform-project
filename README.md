@@ -46,7 +46,7 @@ Insira as informações no `backend.tf` consoante as alterações. Mas caso pref
 ## Executando o Terraform localmente
 
 ```bash
-git clone
+git clone https://github.com/Mateus-Sebastiao/aws-ecs-terraform-project
 ```
 
 ```bash
